@@ -1,7 +1,13 @@
 function converter(req, res){
-    let valor = parseInt(req.body.lado);
+    let valor = req.body.valor;
     let moeda_req = req.body.moeda;
     let moeda = moeda_req.toLowerCase();
+    if(!valor || !moeda_req || typeof valor != "number") {
+        return res.status(400).json({erro: "insira moeda e valor"})
+    }
+    if(moeda != "dolar" && moeda != "dólar" && moeda != "euro"){
+        return res.status(400).json({erro: "moedas aceitas: dolar e euro"})
+    }
     let resultado = 0;
     if (moeda == "dolar" || moeda == "dólar"){
         resultado = converter_dolar(valor);
@@ -9,7 +15,7 @@ function converter(req, res){
     if (moeda == "euro"){
         resultado = converter_euro(valor);
     }
-    res.json(resultado);
+    return res.status(200).json(resultado);
 }
 
 function converter_dolar(valor) {
